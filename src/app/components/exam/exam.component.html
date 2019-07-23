@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="question" *ngFor="let question of questions">
+        <h4>Question - {{ question.originalQuestionID }}</h4>
+        <br />
+        <p>{{ DisplayQuestion(question) }}</p>
+        <br />
+        <div *ngIf="question.includesDiagram" style="margin-bottom: 10px;">
+            <img src="{{ RequestDiagram(question.diagramName) }}" />
+        </div>
+        <div *ngIf="question.isMultipleChoiceQuestion" id="{{ question.originalQuestionID }}">
+            {{ DisplayChoices(question) }}
+        </div>
+        <div *ngIf="!question.isMultipleChoiceQuestion">
+            <b>Answer: </b><input id="{{ question.originalQuestionID }}" type="text" />
+        </div>
+
+        <hr>
+    </div>
+
+    <button (click)="OnTestSubmit()">SUBMIT</button>
+</div>
