@@ -11,6 +11,10 @@ import { Router } from '@angular/router';
 })
 export class ResultComponent implements OnInit {
   private data: any;
+  private qID: any;
+  private answers: any;
+  private remedialQuestions: any;
+
   private skill_name_4: any = [
     "Representing, comparing, and ordering whole numbers as well as demonstrating knowledge of place value",
     "Recognize multiples, computing with whole numbers using the four operations, and estimating computations",
@@ -76,9 +80,14 @@ export class ResultComponent implements OnInit {
       s = s.split(" ");
       this.data.skill_state = s;
     }
-  }
 
-  RequestRemedialQuestions() {
+    this.GetRemedialQuestions();
+
+    this.qID = Object.keys(this.data.result);
+    this.answers = Object.values(this.data.result);
+  }
+  
+  GetRemedialQuestions() {
     let param = {
       grade: this.data.grade,
       student_skill: this.data.skill_state.join(" ")
@@ -87,11 +96,16 @@ export class ResultComponent implements OnInit {
     this.userService.GetUserToken().then(token => {
       this.questionService.GenerateRemedialQuestions(token, param).toPromise().then(data => {
         let res: any = data;
-        this.OpenTest(res.questions);
+        this.remedialQuestions = res.questions;
       })
     })
   }
 
+  RequestRemedialQuestions() {
+    if (this.remedialQuestions) {
+      this.OpenTest(this.remedialQuestions);
+    }
+  }
 
   OpenTest(questions) {
     this.questionService.SaveQuestionSet(questions).then(() => {

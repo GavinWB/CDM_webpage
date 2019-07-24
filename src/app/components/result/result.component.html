@@ -1,37 +1,116 @@
 <div>
-    <table class="table" *ngIf="data.grade == 4">
+    <h4>Review your answers</h4>
+    <div style="width: 100%; overflow: auto;">
+        <table class="table horizontal">
+            <thead>
+                <tr>
+                    <th scope="col">Question</th>
+                    <th *ngFor="let result of qID; index as i">{{ i + 1 }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Question ID</th>
+                    <td *ngFor="let id of qID">{{ id }}</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <th scope="row">Result</th>
+                    <td *ngFor="let result of answers">
+                        <i *ngIf="result" class="fas fa-check-circle"></i>
+                        <i *ngIf="!result" class="far fa-times-circle"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="max-height: 100%; overflow: auto;">
+        <table class="table vertical">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Question ID</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let id of qID; let result of answers; index as i">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ id }}</td>
+                    <td>
+                        <i *ngIf="result" class="fas fa-check-circle"></i>
+                        <i *ngIf="!result" class="far fa-times-circle"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>Score</h4>
+    <div>
+        <p>You correctly answered <b>{{ data.score }}</b> over <b>{{ data.total }}</b> questions.</p>
+    </div>
+
+    <h4>Diagnostic Result</h4>
+    <div style="max-height: 100%; overflow: auto;">
+        <table class="table" *ngIf="data.grade == 4">
+            <thead>
+                <tr>
+                    <th scope="col">Attribute</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Mastery Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let skill of data.skill_state; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ this.skill_name_4[i] }}</td>
+                    <td>
+                        <i *ngIf="skill == 1" class="fas fa-check-circle"></i>
+                        <i *ngIf="skill == 0" class="far fa-times-circle"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table class="table" *ngIf="data.grade == 8">
+            <thead>
+                <tr>
+                    <th scope="col">Attribute</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Mastery Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let skill of data.skill_state; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ this.skill_name_8[i] }}</td>
+                    <td>
+                        <i *ngIf="skill == 1" class="fas fa-check-circle"></i>
+                        <i *ngIf="skill == 0" class="far fa-times-circle"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+        
+        <h4>Some remedial questions</h4>
+    <table class="table">
         <thead>
             <tr>
-                <th scope="col">Attribute</th>
-                <th scope="col">Description</th>
-                <th scope="col">Mastery Level</th>
+                <th scope="col">Question ID</th>
+                <th scope="col">Category</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let skill of data.skill_state; index as i">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ this.skill_name_4[i] }}</td>
-                <td>{{ skill }}</td>
+            <tr *ngFor="let question of remedialQuestions">
+                <td>{{ question.originalQuestionID }}</td>
+                <td>{{ question.category | titlecase }}</td>
             </tr>
         </tbody>
     </table>
 
-    <table class="table" *ngIf="data.grade == 8">
-        <thead>
-            <tr>
-                <th scope="col">Attribute</th>
-                <th scope="col">Description</th>
-                <th scope="col">Mastery Level</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let skill of data.skill_state; index as i">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ this.skill_name_8[i] }}</td>
-                <td>{{ skill }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <button (click)="RequestRemedialQuestions()">Remedial Test</button>
+    <button (click)="RequestRemedialQuestions()">Take Remedial Test</button>
 </div>
